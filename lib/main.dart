@@ -4,13 +4,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meals/screens/categories_screen.dart';
 
+final kColorScheme = ColorScheme.fromSeed(
+  brightness: Brightness.dark,
+  seedColor: const Color.fromARGB(255, 131, 57, 0),
+);
+
 final theme = ThemeData(
   useMaterial3: true,
-  colorScheme: ColorScheme.fromSeed(
-    brightness: Brightness.dark,
-    seedColor: const Color.fromARGB(255, 131, 57, 0),
+  colorScheme: kColorScheme,
+  textTheme: GoogleFonts.latoTextTheme().copyWith(
+    bodyMedium: TextStyle(
+      color: kColorScheme.onSurface,
+    ),
   ),
-  textTheme: GoogleFonts.latoTextTheme(),
 );
 
 void main() {
