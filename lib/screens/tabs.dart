@@ -32,8 +32,8 @@ class Tabs extends HookConsumerWidget {
         items: [
           BottomNavigationBarItem(
               icon: selectedPageIndex.value == 0
-                  ? const Icon(Icons.category)
-                  : const Icon(Icons.category_outlined),
+                  ? const Icon(Icons.restaurant_menu)
+                  : const Icon(Icons.restaurant_menu_rounded),
               label: 'Categories'),
           BottomNavigationBarItem(
               icon: selectedPageIndex.value == 1

@@ -1,22 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meals/models/meal.dart';
+import 'package:meals/providers.dart';
 
-class DetailedMealScreen extends StatelessWidget {
+class DetailedMealScreen extends HookConsumerWidget {
   const DetailedMealScreen({super.key, required this.meal});
   final Meal meal;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var favouriteMeals = ref.watch(favoriteMealsProvider);
+    var isFavourite = useState(favouriteMeals.contains(meal));
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
       ),
       body: ListView(
         children: [
-          Hero(
-            tag: meal.id,
-            child: Image.network(meal.imageUrl),
-          ),
+          Stack(children: [
+            Hero(
+              tag: meal.id,
+              child: Image.network(meal.imageUrl),
+            ),
+            Positioned(
+              right: 10,
+              bottom: 10,
+              child: IconButton.filled(
+                onPressed: () {
+                  if (isFavourite.value) {
+                    ref
+                        .read(favoriteMealsProvider.notifier)
+                        .removeFavoriteMeal(meal);
+                  } else {
+                    ref
+                        .read(favoriteMealsProvider.notifier)
+                        .addFavoriteMeal(meal);
+                  }
+                  isFavourite.value = !isFavourite.value;
+                },
+                icon: isFavourite.value
+                    ? const Icon(Icons.favorite)
+                    : const Icon(Icons.favorite_border),
+              ),
+            )
+          ]),
           Padding(
             padding: const EdgeInsets.all(10),
             child: Column(

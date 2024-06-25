@@ -41,14 +41,17 @@ class MealItemContent extends StatelessWidget {
         Hero(
           tag: meal.id,
           child: FadeInImage(
+            height: 300,
+            width: MediaQuery.of(context).size.width,
             placeholder: MemoryImage(kTransparentImage),
             image: NetworkImage(meal.imageUrl),
+            fit: BoxFit.cover,
           ),
         ),
         Positioned(
-          bottom: 0,
-          right: 0,
-          left: 0,
+          bottom: -1,
+          right: -1,
+          left: -1,
           child: Container(
             color: Colors.black54.withOpacity(0.7),
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
