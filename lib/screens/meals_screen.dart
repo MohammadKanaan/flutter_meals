@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meals/data/dummy_data.dart';
 import 'package:meals/providers.dart';
+import 'package:meals/widgets/meal_item.dart';
 
 class MealsScreen extends HookConsumerWidget {
   const MealsScreen({super.key});
@@ -15,9 +16,7 @@ class MealsScreen extends HookConsumerWidget {
     Widget content = ListView.builder(
       itemCount: meals.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(meals[index].title),
-        );
+        return MealItem(meal: meals[index]);
       },
     );
     if (meals.isEmpty) {
