@@ -10,9 +10,28 @@ class MealsScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var selectedCategory = ref.watch(selectedCategoryProvider);
-    final meals = dummyMeals
-        .where((meal) => meal.categories.contains(selectedCategory.id))
-        .toList();
+    final meals = dummyMeals.where((meal) {
+      if (meal.categories.contains(selectedCategory.id)) {
+        if (ref.watch(filtersProvider.select((value) => value.isGlutenFree)) &&
+            !meal.isGlutenFree) {
+          return false;
+        }
+        if (ref.watch(filtersProvider.select((value) => value.isLactoseFree)) &&
+            !meal.isLactoseFree) {
+          return false;
+        }
+        if (ref.watch(filtersProvider.select((value) => value.isVegetarian)) &&
+            !meal.isVegetarian) {
+          return false;
+        }
+        if (ref.watch(filtersProvider.select((value) => value.isVegan)) &&
+            !meal.isVegan) {
+          return false;
+        }
+        return true;
+      }
+      return false;
+    }).toList();
     Widget content = ListView.builder(
       itemCount: meals.length,
       itemBuilder: (context, index) {

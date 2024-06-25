@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:meals/providers.dart';
 import 'package:meals/screens/categories_screen.dart';
 import 'package:meals/screens/favorites_screen.dart';
+import 'package:meals/widgets/custom_drawer.dart';
 
 class Tabs extends HookConsumerWidget {
   const Tabs({super.key});
@@ -10,10 +12,10 @@ class Tabs extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Widget activePage = const CategoriesScreen();
-    var selectedPageIndex = useState(0);
+    var selectedPageIndex = ref.watch(activeScreenProvider);
     var activePageTitle = useState('Categories');
 
-    if (selectedPageIndex.value == 1) {
+    if (selectedPageIndex == 1) {
       activePage = const FavoritesScreen();
       activePageTitle.value = 'Favorites';
     }
@@ -22,21 +24,24 @@ class Tabs extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('Meals'),
       ),
+      drawer: const Drawer(
+        child: CustomDrawer(),
+      ),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedPageIndex.value,
+        currentIndex: selectedPageIndex,
         selectedFontSize: 14,
         onTap: (index) {
-          selectedPageIndex.value = index;
+          ref.read(activeScreenProvider.notifier).setActiveScreen(index);
         },
         items: [
           BottomNavigationBarItem(
-              icon: selectedPageIndex.value == 0
+              icon: selectedPageIndex == 0
                   ? const Icon(Icons.restaurant_menu)
                   : const Icon(Icons.restaurant_menu_rounded),
-              label: 'Categories'),
+              label: 'Meals'),
           BottomNavigationBarItem(
-              icon: selectedPageIndex.value == 1
+              icon: selectedPageIndex == 1
                   ? const Icon(Icons.favorite)
                   : const Icon(Icons.favorite_border_outlined),
               label: 'Favorites'),
