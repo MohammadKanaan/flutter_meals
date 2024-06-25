@@ -15,7 +15,7 @@ class CategoryGridItem extends HookConsumerWidget {
         categoryProvider.setCategroy(category);
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (ctx) => const MealsScreen(title: '', meals: []),
+            builder: (ctx) => const MealsScreen(),
           ),
         );
       },

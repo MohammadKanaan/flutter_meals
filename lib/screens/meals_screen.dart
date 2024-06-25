@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:meals/models/meal.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:meals/data/dummy_data.dart';
+import 'package:meals/providers.dart';
 
-class MealsScreen extends StatelessWidget {
-  final String title;
-  final List<Meal> meals;
-  const MealsScreen({super.key, required this.title, required this.meals});
+class MealsScreen extends HookConsumerWidget {
+  const MealsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var selectedCategory = ref.watch(selectedCategoryProvider);
+    final meals = dummyMeals
+        .where((meal) => meal.categories.contains(selectedCategory.id))
+        .toList();
     Widget content = ListView.builder(
       itemCount: meals.length,
       itemBuilder: (context, index) {
@@ -41,7 +45,7 @@ class MealsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(selectedCategory.title),
       ),
       body: content,
     );
