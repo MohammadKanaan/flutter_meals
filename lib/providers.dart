@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meals/models/category.dart';
 import 'package:meals/models/filter.dart';
 import 'package:meals/models/meal.dart';
+import 'package:meals/providers/meals_provider.dart';
 
 class SelectedCategoryNotifier extends StateNotifier<Category> {
   // We initialize the list of todos to an empty list
@@ -23,12 +24,24 @@ class FavoriteMealsNotifier extends StateNotifier<List<Meal>> {
   // We initialize the list of todos to an empty list
   FavoriteMealsNotifier() : super([]);
 
-  void addFavoriteMeal(Meal meal) {
+  void addFavoriteMeal(Meal meal, BuildContext context) {
     state = [...state, meal];
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Added to favorites!'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
-  void removeFavoriteMeal(Meal meal) {
+  void removeFavoriteMeal(Meal meal, BuildContext context) {
     state = state.where((element) => element.id != meal.id).toList();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Removed from favorites!'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 }
 
@@ -80,4 +93,17 @@ class FiltersNotifier extends StateNotifier<Filter> {
 
 final filtersProvider = StateNotifierProvider<FiltersNotifier, Filter>((ref) {
   return FiltersNotifier();
+});
+
+final filteredMealsProvider = Provider((ref) {
+  final meals = ref.watch(mealsProvider);
+  final filters = ref.watch(filtersProvider);
+
+  return meals.where((meal) {
+    if (filters.isGlutenFree && !meal.isGlutenFree) return false;
+    if (filters.isLactoseFree && !meal.isLactoseFree) return false;
+    if (filters.isVegetarian && !meal.isVegetarian) return false;
+    if (filters.isVegan && !meal.isVegan) return false;
+    return true;
+  }).toList();
 });

@@ -31,11 +31,11 @@ class DetailedMealScreen extends HookConsumerWidget {
                   if (isFavourite.value) {
                     ref
                         .read(favoriteMealsProvider.notifier)
-                        .removeFavoriteMeal(meal);
+                        .removeFavoriteMeal(meal, context);
                   } else {
                     ref
                         .read(favoriteMealsProvider.notifier)
-                        .addFavoriteMeal(meal);
+                        .addFavoriteMeal(meal, context);
                   }
                   isFavourite.value = !isFavourite.value;
                 },
