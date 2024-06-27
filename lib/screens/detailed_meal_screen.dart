@@ -39,9 +39,19 @@ class DetailedMealScreen extends HookConsumerWidget {
                   }
                   isFavourite.value = !isFavourite.value;
                 },
-                icon: isFavourite.value
-                    ? const Icon(Icons.favorite)
-                    : const Icon(Icons.favorite_border),
+                icon: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 100),
+                  child: Icon(
+                    isFavourite.value ? Icons.favorite : Icons.favorite_border,
+                    key: ValueKey(isFavourite.value),
+                  ),
+                  transitionBuilder: (child, animation) {
+                    return ScaleTransition(
+                      scale: animation,
+                      child: child,
+                    );
+                  },
+                ),
               ),
             )
           ]),

@@ -26,6 +26,7 @@ class FavoriteMealsNotifier extends StateNotifier<List<Meal>> {
 
   void addFavoriteMeal(Meal meal, BuildContext context) {
     state = [...state, meal];
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Added to favorites!'),
